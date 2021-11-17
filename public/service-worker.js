@@ -1,17 +1,18 @@
 console.log("Hello from your service worker!");
-const CACHE_NAME = "static-cache-v2";
-const DATA_CACHE_NAME = "data-cache-v1";
+
 const FILES_TO_CACHE = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
-  "/style.css",
+  "/styles.css",
   "/db.js",
   "/index.js",
   "/icons/icon-192x192.png",
   "/icons/icon-512x512.png"
 ];
 
+const CACHE_NAME = "static-cache-v2";
+const DATA_CACHE_NAME = "data-cache-v1";
 // install
 self.addEventListener("install", function(evt) {
     evt.waitUntil(
@@ -49,7 +50,7 @@ self.addEventListener("install", function(evt) {
         caches.open(DATA_CACHE_NAME).then(cache => {
           return fetch(evt.request)
             .then(response => {
-              // If the response was good, clone it and store it in the cache.
+
               if (response.status === 200) {
                 cache.put(evt.request.url, response.clone());
               }
@@ -57,7 +58,7 @@ self.addEventListener("install", function(evt) {
               return response;
             })
             .catch(err => {
-              // Network request failed, try to get it from the cache.
+
               return cache.match(evt.request);
             });
         }).catch(err => console.log(err))
